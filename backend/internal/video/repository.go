@@ -1,7 +1,6 @@
 package video
 
 import (
-	"github.com/otr-universe/api/pkg/db"
 	"gorm.io/gorm"
 )
 
@@ -9,8 +8,8 @@ type Repository struct {
 	db *gorm.DB
 }
 
-func NewRepository() *Repository {
-	return &Repository{db: db.DB}
+func NewRepository(dbConn *gorm.DB) *Repository {
+	return &Repository{db: dbConn}
 }
 
 func (r *Repository) List(universeID, contentType string, page, pageSize int, includeAdult bool) ([]VideoJob, int64, error) {

@@ -1,7 +1,7 @@
 package seed
 
 import (
-	"log/slog"
+	"log"
 	"time"
 
 	"gorm.io/gorm"
@@ -122,7 +122,7 @@ func DemoData(db *gorm.DB) error {
 		return err
 	}
 
-	slog.Info("seed: all demo data ready")
+	log.Printf("seed: all demo data ready")
 	return nil
 }
 
@@ -131,13 +131,13 @@ func DemoData(db *gorm.DB) error {
 func ensureUniverse(db *gorm.DB, u *universe.Universe) (*universe.Universe, error) {
 	var existing universe.Universe
 	if err := db.Where("slug = ?", u.Slug).First(&existing).Error; err == nil {
-		slog.Info("seed: universe already exists", "slug", u.Slug)
+		log.Printf("seed: universe already exists: %v", u.Slug)
 		return &existing, nil
 	}
 	if err := db.Create(u).Error; err != nil {
 		return nil, err
 	}
-	slog.Info("seed: universe created", "slug", u.Slug)
+	log.Printf("seed: universe created: %v", u.Slug)
 	return u, nil
 }
 
@@ -145,13 +145,13 @@ func ensureLore(db *gorm.DB, e *lore.Entry) error {
 	var count int64
 	db.Model(&lore.Entry{}).Where("title = ? AND universe_id = ?", e.Title, e.UniverseID).Count(&count)
 	if count > 0 {
-		slog.Info("seed: lore entry already exists", "title", e.Title)
+		log.Printf("seed: lore entry already exists: %v", e.Title)
 		return nil
 	}
 	if err := db.Create(e).Error; err != nil {
 		return err
 	}
-	slog.Info("seed: lore entry created", "title", e.Title)
+	log.Printf("seed: lore entry created: %v", e.Title)
 	return nil
 }
 
@@ -159,13 +159,13 @@ func ensureVideo(db *gorm.DB, j *video.VideoJob) error {
 	var count int64
 	db.Model(&video.VideoJob{}).Where("title = ? AND universe_id = ?", j.Title, j.UniverseID).Count(&count)
 	if count > 0 {
-		slog.Info("seed: video job already exists", "title", j.Title)
+		log.Printf("seed: video job already exists: %v", j.Title)
 		return nil
 	}
 	if err := db.Create(j).Error; err != nil {
 		return err
 	}
-	slog.Info("seed: video job created", "title", j.Title)
+	log.Printf("seed: video job created: %v", j.Title)
 	return nil
 }
 
