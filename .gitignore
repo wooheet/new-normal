@@ -1,0 +1,23 @@
+# Node
+node_modules/
+.next/
+.turbo/
+dist/
+*.tsbuildinfo
+
+# Go binaries
+bin/
+*.exe
+server
+main
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+
+# Go cache
+vendor/
